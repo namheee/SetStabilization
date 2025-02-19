@@ -222,7 +222,6 @@ def recursiveCanalization(G_new, cS):
     canalizedV = [x.split(' = ')[0] for x in G_eliminated.splitlines() if x.split(' = ')[1].strip() == '']
     i = 1
     while 1:
-        print('recursiveCanalization',i)
         G_eliminated = eliminateComplementS(G_eliminated, canalizedV)
         # print('r',G_eliminated)
         canalizedV_new = [x.split(' = ')[0] for x in G_eliminated.splitlines() if x.split(' = ')[1].strip() == '']
@@ -231,6 +230,8 @@ def recursiveCanalization(G_new, cS):
         else:
             i += 1
             canalizedV = canalizedV_new
+
+        print('recursiveCanalization:',i)
 
     return G_eliminated
 
@@ -273,7 +274,13 @@ def reducedwithS(net, S, depth = 5):
 
 def defineUD(desiredSet, undesiredSet):
     D_state = desiredSet.T.loc[(desiredSet.sum(axis=0)/(desiredSet.shape[0]) == 0) | (desiredSet.sum(axis=0)/(desiredSet.shape[0]) == 1),0].to_dict()
-
+    # U_state = undesiredSet.T.loc[(undesiredSet.sum(axis=0)/(undesiredSet.shape[0]) == 0) | (undesiredSet.sum(axis=0)/(undesiredSet.shape[0]) == 1),0].to_dict()
+    # D_list = []
+    # for k,v in D_state.items():
+    #     if (k<=8) & (v==0): D_list.append('~x0'+str(k+1))
+    #     elif (k<=8) & (v==1): D_list.append('x0'+str(k+1))
+    #     elif (k>8) & (v==0): D_list.append('~x'+str(k+1))
+    #     else: D_list.append('x'+str(k+1))
     D_list = []
     for k,v in D_state.items():
         if (v==0) : D_list.append('~'+k)
@@ -286,14 +293,18 @@ def defineUD(desiredSet, undesiredSet):
         for k,v in u_states.items():
             if (v==0) : U_list.append('~'+k)
             else: U_list.append(k)
-
+            # if (k<=8) & (v==0): U_list.append('~x0'+str(k+1))
+            # elif (k<=8) & (v==1): U_list.append('x0'+str(k+1))
+            # elif (k>8) & (v==0): U_list.append('~x'+str(k+1))
+            # else: U_list.append('x'+str(k+1)) 
         U_lists.append(U_list)
 
             
     return D_list, U_lists
 
 def defineUD_individual(desiredSet, undesiredSet):
-
+    #D_state = desiredSet.T.loc[(desiredSet.sum(axis=0)/(desiredSet.shape[0]) == 0) | (desiredSet.sum(axis=0)/(desiredSet.shape[0]) == 1),0].to_dict()
+    #U_state = undesiredSet.T.loc[(undesiredSet.sum(axis=0)/(undesiredSet.shape[0]) == 0) | (undesiredSet.sum(axis=0)/(undesiredSet.shape[0]) == 1),0].to_dict()
     D_lists = [] # individual 
     for d_idx in range(desiredSet.shape[0]): 
         d_states = {x:int(y) for x,y in desiredSet.iloc[d_idx,:].to_dict().items() if y != '*'}
@@ -301,7 +312,10 @@ def defineUD_individual(desiredSet, undesiredSet):
         for k,v in d_states.items():
             if (v==0) : D_list.append('~'+k)
             else: D_list.append(k)
-
+            # if (k<=8) & (v==0): D_list.append('~x0'+str(k+1))
+            # elif (k<=8) & (v==1): D_list.append('x0'+str(k+1))
+            # elif (k>8) & (v==0): D_list.append('~x'+str(k+1))
+            # else: D_list.append('x'+str(k+1)) 
         D_lists.append(D_list)
     D_list = list(set(itertools.chain(*D_lists)))
     
@@ -312,7 +326,10 @@ def defineUD_individual(desiredSet, undesiredSet):
         for k,v in u_states.items():
             if (v==0) : U_list.append('~'+k)
             else: U_list.append(k)
-
+            # if (k<=8) & (v==0): U_list.append('~x0'+str(k+1))
+            # elif (k<=8) & (v==1): U_list.append('x0'+str(k+1))
+            # elif (k>8) & (v==0): U_list.append('~x'+str(k+1))
+            # else: U_list.append('x'+str(k+1)) 
         U_lists.append(U_list)
 
             

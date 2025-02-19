@@ -3,12 +3,50 @@ from setFunction import *
 
 from scipy.spatial import distance
 import numpy as np
+#from sklearn.cluster import AffinityPropagation
 from collections import Counter
 from pyboolnet.digraphs import _primes2signed_digraph
 from sklearn.cluster import KMeans
 import itertools
 import copy
 import pickle
+
+# def model2attBNET(model_file, n_clusters=3):
+#     primes = bnet2primes(model_file)
+
+#     # ==========================================
+#     steady, cyclicSet = computeAtt(primes)
+#     str_steady = steady + cyclic2str(cyclicSet)
+#     str_steady = set(str_steady)
+#     print(str_steady)
+#     # ==========================================
+
+#     # compute similarity using hamming distance (K-means clustering)
+#     similarity = np.array([[1-distance.hamming(list(w1),list(w2)) for w1 in str_steady] for w2 in str_steady])
+#     kmeans = KMeans(n_clusters=n_clusters, random_state=123, n_init="auto").fit(similarity)
+    
+#     print(model_file)
+#     print('Cluster#', len(np.unique(kmeans.labels_)), kmeans.labels_)
+#     labels = dict(Counter(kmeans.labels_))
+    
+#     max_labels = [k for k,v in labels.items() if v == max(labels.values())]
+
+#     desired_ = [x for i,x in enumerate(str_steady) if i in np.where(kmeans.labels_ == max_labels[0])[0]]
+#     undesired_ = list(set(str_steady) - set(desired_))
+
+#     desiredSet = pd.DataFrame([list(x) for x in desired_], columns = list(primes.keys()))
+#     desiredSet = desiredSet.loc[:,~np.any(desiredSet == '*', axis=0)].astype('int')
+#     undesiredSet = pd.DataFrame([list(x) for x in undesired_], columns = list(primes.keys()))
+#     #undesiredSet = undesiredSet.loc[:,~np.any(undesiredSet == '*', axis=0)].astype('int')
+
+#     D_list, U_list = defineUD(desiredSet, undesiredSet)
+#     desired = list(set(desired_))
+#     undesired = list(set(str_steady) - set(desired))
+
+#     pThres = 1 #len(U_list)*2/3
+#     phenotypeNode = [k for k,v in Counter(itertools.chain(*[set(D_list)-set(u_list) for u_list in U_list])).items() if v >= pThres][:2]
+#     return str_steady, D_list, U_list, desired, undesired, phenotypeNode
+
 
 
 
@@ -39,7 +77,8 @@ def model2attBSIM(model_file, simulationPickle, n_clusters=2, pThres=2):
     desiredSet = pd.DataFrame([list(x) for x in desired_], columns = list(primes.keys()))
     desiredSet = desiredSet.loc[:,~np.any(desiredSet == '*', axis=0)].astype('int')
     undesiredSet = pd.DataFrame([list(x) for x in undesired_], columns = list(primes.keys()))
- 
+    #undesiredSet = undesiredSet.loc[:,~np.any(undesiredSet == '*', axis=0)].astype('int')
+
     D_list, U_list = defineUD(desiredSet, undesiredSet)
     desired = list(set(desired_))
     undesired = list(set(str_steady) - set(desired))
@@ -76,7 +115,10 @@ def makefTarget_updated(fTarget, model_file, V_idx, V_pair, desired, undesired, 
                 if (len(uidx) == 0 ) & (~isNpoint):
                     addTarget.append(add)
             
-         
+            # if (len(addTargeto)>0) & (len(addTarget)==0):
+            #     addTarget = [[]] # if all desired values of addTarget are * 
+            # fTarget2 += ([list(set(itertools.chain(*x))) for x in (itertools.product(addTarget, [candTarget]))])
+            
             if (len(addTargeto)>0) & (len(addTarget)==0):
                 addTarget = [[]] # at least one value of addTargets is * ,i.e., there is no correct answer to drvie desired state
                 fTarget2 += []
@@ -167,7 +209,7 @@ def main4_updated(model_file, desired, undesired, phenotypeNode, oriN=0, remaine
                 setTarget = mFVSs(reducedwithS(G_eliminated, S))
                 fTarget = [list(set(itertools.chain(*x))) for x in (itertools.product(setTarget, list([controlTarget])))]
                 result['pp2_*'] = (0, desiredIdx, undesiredIdx, controlTarget, fTarget, tuple(S))
-
+                # mFVSs(makeReducedForm(G_eliminated)) # & controlTarget
     
             else:
                 def updatedS_G(G_eliminated, V_pair, S, cS):
@@ -210,16 +252,16 @@ def main4_updated(model_file, desired, undesired, phenotypeNode, oriN=0, remaine
                     j = 1; S = S_o; G_eliminated = G_o
                     check_idx = usidx
                     ppCombiS_updated2, pp_seqS2 = ppCombiS_updated, pp_seqS
-                    print('S',S)
+                    # print('S',S)
                     while 1:
                         S2, G_eliminated2 = iteratewithS_updated(check_idx, ppCombiS_updated2, pp_seqS2, V_pair, G_eliminated, S)
                         desiredIdx = checkIN(nodeNum, desiredVariable, S2)
                         undesiredIdx = checkIN(nodeNum, undesiredVariable, S2)   
                         if len(desiredIdx) == 0 : break
-                        print(desiredIdx, undesiredIdx)
-                        print('S',S2)
+                        # print(desiredIdx, undesiredIdx)
+                        # print('S',S2)
                         if (S == S2) | (len(S2) == nodeNum):        
-                            print('END2', desiredIdx, undesiredIdx)
+                            # print('END2', desiredIdx, undesiredIdx)
                             if len(S2) != nodeNum: j -= 1
     
                             controlTarget = set(S2) - set([x.split(' = ')[0] for x in makeReducedForm(G_eliminated2).splitlines()])                        
@@ -247,7 +289,7 @@ def main4_updated(model_file, desired, undesired, phenotypeNode, oriN=0, remaine
                             G_eliminated, S, pp_combIdx2, pp_seqS2, ppCombiS_updated2 = updatedS_G(G_eliminated2, V_pair, S2, cS2)
                             check_idx = pp_combIdx2[0] # randomly select one pp (it does not guarantee the least)
                             j += 1
-                    print(j)
+                    # print(j)
             allresult['pp1_'+str(cidx)] = result
         else: continue
     return V_idx, allresult, allremained
