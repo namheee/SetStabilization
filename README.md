@@ -9,5 +9,5 @@
 
 ## Example
 
-+ We provide a tutorial example using Jupyter notebooks.
-+ A example network is provided in the `example` directory.  
++ We provide a main simulation example using Jupyter notebooks. Please refer to Tutorial.ipynb.
++ An example network is provided in the `example` directory.  
