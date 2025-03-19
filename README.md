@@ -3,8 +3,8 @@
 
 ## Notes
 
-+ Main functions are included in setMain.py and setFunction.py.
-+ An auxiliary function is included in choonFunction.py, referenced from https://github.com/choonlog/AttractorTransition.
++ Main functions are included in `setMain.py` and `setFunction.py`.
++ An auxiliary function is included in `choonFunction.py`, with a referecne to its source at https://github.com/choonlog/AttractorTransition.
 + A related paper is expected to be published soon.
 
 ## Example
