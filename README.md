@@ -8,7 +8,7 @@
 
 
 ## Notes
-+ To generate random Boolean networks, we utilized [BNGenerator](https://github.com/choonlog/OutputStabilization), a software tool that contructs random networks based on biological Boolean logic extracted from the Cell Collective (https://cellcollective.org/).
++ To generate random Boolean networks, we utilized [BNGenerator](https://github.com/choonlog/OutputStabilization), a software tool that constructs random networks based on biological Boolean logics extracted from the Cell Collective (https://cellcollective.org/).
 + To identify all attractors of Boolean networks, we utilized [BooleanSim](https://github.com/jehoons/BooleanSim), a Python 3 tool developed based upon the [booleannet](https://github.com/ialbert/booleannet).
 + Main functions are included in `setMain.py` and `setFunction.py`.
 + An auxiliary function is included in `choonFunction.py`, with a referecne to its source at [AttractorTransition](https://github.com/choonlog/AttractorTransition).
