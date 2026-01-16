@@ -24,7 +24,8 @@ pystablemotifs.drivers.GRASP for greedy randomized adaptive search procedure (GR
 
 + For [stable motif control](https://github.com/jcrozum/pystablemotifs),
 ```python
-ar=pystablemotifs.AttractorRepertorie.from_primes and ar.succession_diagram.reprogram_to_trap_spaces(); specifically, ‘AttractorRepertoire.from_primes’ is employed to identify the complete set of attractors, while ‘reprogram_to_trap_spaces’ is used to determine the control inputs based on the succession diagram; the computational time includes all steps, including attractor identification and control input search.
+ar=pystablemotifs.AttractorRepertorie.from_primes
+ar.succession_diagram.reprogram_to_trap_spaces()
 ```
 
 + For [FVS control](https://github.com/CASCI-lab/CANA),
