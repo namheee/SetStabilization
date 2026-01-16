@@ -19,7 +19,7 @@
 ```python
 pystablemotifs.drivers.minimal_drivers for brute force search
 
-pystablemotifs.drivers.GRASP for greedy randomized adaptive search procedure (GRASP) search (GRASP_iterations = 2,000) for LDOI control
+pystablemotifs.drivers.GRASP(GRASP_iterations = 2,000) for LDOI control
 ```
 
 + For [stable motif control](https://github.com/jcrozum/pystablemotifs),
